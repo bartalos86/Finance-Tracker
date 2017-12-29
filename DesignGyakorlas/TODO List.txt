@@ -1,0 +1,11 @@
+﻿Mit kell meg csinalni
+
+-Meg kene csinalnini hogy ha ugyanabbol az itembol 2 vagy tobbet tesz valaki akkor egyberakja oket //kesz
+-Megcsinalni a javaslatokhoz az adatbazist //kesz
+-Megcsinalni szebbre a mentes formatozasat //kesz
+-Esetleg javitani a deserializaciot hogy nézze a tulajdonsagokat (lehet ez megvan, nemtudom...) //Kicsit javitva lettek
+
+-Lehet kicsit at kene csinalni egyszeriuseg kedvbeert a tipusokat az uj modszerem es az enumok hasznalataval //kesz
+-Optimalizalni az adatbazis muodeset esetleg a memoria árán is //kesz
+-Hozzaadni hogy a felhasznalo is betehesse itemjét az adatbazisba //kesz
+-! esetleg ha nagyon jol fog menni akkor analizani az adatot es elore betolteni a legtobbet hasznalt dolgokat //kesz

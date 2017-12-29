@@ -1,0 +1,52 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:DesignGyakorlas.Styles.ListView"
+                    xmlns:conv="clr-namespace:DesignGyakorlas.Models.Converters">
+
+
+    <Style TargetType="ListView" x:Key="mainListView">
+    
+        <Style.Setters>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Black"/>
+     
+
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        </Style.Setters>
+    </Style>
+
+    <!--Benne levo GridView-hez a template-->
+    <Style TargetType="{x:Type ListViewItem}" x:Key="ListViewItemStyle">
+        <Style.Resources>
+            <conv:PolarToColorConverter x:Key="PolarToBrushConv"/>
+        </Style.Resources>
+
+       
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{Binding Path=Money, Converter={StaticResource PolarToBrushConv}}"/>
+            </Trigger>
+            <DataTrigger Binding="{Binding IsSubscribtion}" Value="True">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#b7291f" Offset="0.0"/>
+                            <GradientStop Color="#b70c00" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Foreground" Value="White"/>
+            </DataTrigger>
+        </Style.Triggers>
+
+        <Style.Setters>
+            
+            <Setter Property="Background" Value="{Binding Path=Money, Converter={StaticResource PolarToBrushConv}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+           
+        </Style.Setters>
+        
+    </Style>
+    
+</ResourceDictionary>

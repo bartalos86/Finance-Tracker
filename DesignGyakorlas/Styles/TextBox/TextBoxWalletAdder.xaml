@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:DesignGyakorlas.Styles.TextBox"
+                    xmlns:cal ="http://www.caliburnproject.org">
+
+    <Style TargetType="TextBox" x:Key="TextWalletAdd">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBoxBase">
+                    <Border CornerRadius="2" Background="{TemplateBinding Background}">
+                        <StackPanel Orientation="Horizontal">
+                            <ScrollViewer Margin="1" Width="135" Height="{TemplateBinding Height}" x:Name="PART_ContentHost" />
+                            <Button cal:Message.Attach="[Event Click] = [Action AddWallet()]" Height="25" Content="+" FontSize="8" Style="{StaticResource alapBtn}" Width="25"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="ExtraBold"/>
+                        </StackPanel>
+
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+</ResourceDictionary>

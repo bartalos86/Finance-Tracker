@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:DesignGyakorlas.Styles.Button">
+
+    <Style TargetType="Button" x:Key="transparentButton">
+        <Style.Setters>
+            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="False"/>
+            <Setter Property="MaxHeight" Value="55"/>
+            <Setter Property="MaxWidth" Value="300"/>
+            <Setter Property="Foreground" Value="#FF4BBF54"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border  CornerRadius="3" Padding="10,0,0,0" Background="Transparent" BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+
+            </Setter>
+        </Style.Setters>
+    </Style>
+
+</ResourceDictionary>
