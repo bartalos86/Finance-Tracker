@@ -55,19 +55,19 @@ namespace DesignGyakorlas.ViewModels
 
            
 
-            if (inputData == null)
-            {
-                IsInputDataValid = false;
-                tempWallets.Add(new WalletItemModel() {
-                    ImageSource = "/DesignGyakorlas;component/Images/Icons/wallet.png",
-                    ItemText = "Default",
-                    WalletID = 0
+            //if (inputData == null)
+            //{
+            //    IsInputDataValid = false;
+            ////    tempWallets.Add(new WalletItemModel() {
+            ////        ImageSource = "/DesignGyakorlas;component/Images/Icons/wallet.png",
+            ////        ItemText = "Default",
+            ////        WalletID = 0
 
-            });
+            ////});
 
-                _selectedWallet = tempWallets[0];
-                _selectedCurrency = tempCurrencies[0];
-            }
+            //    _selectedWallet = tempWallets[0];
+            //    _selectedCurrency = tempCurrencies[0];
+            //}
             if (inputData != null && inputData.Wallets != null)
                 IsInputDataValid = true;
 
@@ -103,7 +103,9 @@ namespace DesignGyakorlas.ViewModels
                 tempWallets.Add(new WalletItemModel() {
                     ImageSource = "/DesignGyakorlas;component/Images/Icons/wallet.png",
                     ItemText = WalletNameText,
-                    WalletID = new Random().Next(Wallets.Count, 150)
+                    WalletID = new Random().Next(Wallets.Count, 150),
+                    Money = 0
+                    
                 });
                 Wallets = tempWallets;
                 IsAddingWallet = Visibility.Hidden;

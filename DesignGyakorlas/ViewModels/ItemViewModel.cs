@@ -146,7 +146,7 @@ namespace DesignGyakorlas.ViewModels
             
         }
 
-        private int _walletID;
+        private int _walletID = 0;
 
         public int WalletID
         {

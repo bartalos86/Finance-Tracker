@@ -48,5 +48,14 @@ namespace DesignGyakorlas.Models
             set { _walletID = value; }
         }
 
+        private double? _money;
+
+        public double? Money
+        {
+            get { return _money; }
+            set { _money = value; }
+        }
+
+
     }
 }
