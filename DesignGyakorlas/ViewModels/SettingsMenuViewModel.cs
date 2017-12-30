@@ -112,31 +112,38 @@ namespace DesignGyakorlas.ViewModels
 
         public void RemoveWalletButton()
         {
-            MessageBox.Show(SelectedWalletIndex.ToString());
-            if(SelectedWalletIndex != -1 && Wallets.Count != 1)
-            tempWallets.RemoveAt(SelectedWalletIndex);
+            // MessageBox.Show(SelectedWalletIndex.ToString());
+            if (SelectedWalletIndex != -1 && Wallets.Count != 1)
+            {
+                 DeletedWalletId = tempWallets[SelectedWalletIndex].WalletID;
+                tempWallets.RemoveAt(SelectedWalletIndex);
+              
+                string savePath = $"{Directory.GetCurrentDirectory()}/Saves/";
+                StreamReader dataReader;
+                var filesInFolder = Directory.GetFiles(savePath, "*.mrk");
+                foreach (var file in filesInFolder)
+                {
+                    dataReader = new StreamReader(file);
+                    string rawJson = dataReader.ReadToEnd();
+                    dataReader.Dispose();
+                    ItemViewModel tempBeforeDel = JsonConvert.DeserializeObject<ItemViewModel>(rawJson);
 
+                    if (tempBeforeDel.WalletID == deletedWalletId)
+                        File.Delete(file);
+            }
+            } 
+           
             Wallets = tempWallets;
-            //SelectedWalletIndex = SelectedWalletIndex + 1;
 
-            //int previousItemIndex = SelectedWalletIndex - 1;
-            //if (SelectedWalletIndex != null)
-            //{
-            //    tempWallets.RemoveAt((int)SelectedWalletIndex);
-            //    if (previousItemIndex == -1 && Wallets.Count <= 1)
-            //        SelectedWallet = Wallets.Find() previousItemIndex + 1;
-            //    else if (SelectedWalletIndex > 1)
-            //        SelectedWalletIndex = previousItemIndex;
-            //    else if (previousItemIndex == -1 && Wallets.Count > 1)
-            //        SelectedWalletIndex = previousItemIndex + 1;
-            //    else
-            //        SelectedWalletIndex = previousItemIndex;
-            //}
-           // Wallets = tempWallets;
+           
+
         }
 
         public void OkButton()
         {
+            if (SelectedWalletIndex == -1)
+                SelectedWalletIndex = 0;
+
             string saveDir = $"{Directory.GetCurrentDirectory()}\\Settings";
             string saveItem = $"{Directory.GetCurrentDirectory()}\\Settings\\settings.json";
             if (!Directory.Exists(saveDir))
@@ -151,7 +158,7 @@ namespace DesignGyakorlas.ViewModels
                 Wallets = tempWallets.ToArray(),
                 CurrencyTypeNum = (int)SelectedCurrency.Type,
                 SelectedWalletID = SelectedWallet.WalletID,
-
+                DeletedWalletID = DeletedWalletId
             };
 
             string serializedData = JsonConvert.SerializeObject(dataForSerialization);
@@ -162,23 +169,27 @@ namespace DesignGyakorlas.ViewModels
             saveWriter.Write(serializedData);
             saveWriter.Dispose();
             //Show Dialog
-            if (IsWalletChanged)
-            {
-                IWindowManager manager1 = new WindowManager();
-                manager1.ShowWindow(new CustomDialogueBoxViewModel(new DialogDataModel()
-                {
-                    Title = "Warning!",
-                    Message = "If you add item now it will go to the old wallet, you can add new items only after resatart",
-                    OkButtonText = "I agree",
-                    SecondButtonNeeded = false,
+            //if (IsWalletChanged)
+            //{
+            //    IWindowManager manager1 = new WindowManager();
+            //    manager1.ShowWindow(new CustomDialogueBoxViewModel(new DialogDataModel()
+            //    {
+            //        Title = "Warning!",
+            //        Message = "If you add item now it will go to the old wallet, you can add new items only after resatart",
+            //        OkButtonText = "I agree",
+            //        SecondButtonNeeded = false,
 
-                }));
-            }
+            //    }));
+            //}
+
+            //if (IsWalletChanged)
+            //    MessageBox.Show("valtozott");
             this.TryClose();
         }
 
         public void ExitButton()
         {
+           
             this.TryClose();
         }
      
@@ -233,7 +244,7 @@ namespace DesignGyakorlas.ViewModels
             set { _walletNameText = value;NotifyOfPropertyChange(() => WalletNameText); }
         }
 
-        private int _selectedWalletIndex;
+        private int _selectedWalletIndex = 0;
 
         public int SelectedWalletIndex
         {
@@ -242,6 +253,15 @@ namespace DesignGyakorlas.ViewModels
         }
 
         public bool IsWalletChanged { get; set; }
+
+        private int deletedWalletId = -1;
+
+        public int DeletedWalletId
+        {
+            get { return deletedWalletId; }
+            set { deletedWalletId = value; }
+        }
+
 
 
         public CommandHandler AddWalletCommand { get; set; }

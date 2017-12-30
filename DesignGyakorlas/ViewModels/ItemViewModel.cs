@@ -134,13 +134,15 @@ namespace DesignGyakorlas.ViewModels
                     _isSubscribtion = true; }
         }
 
-        private bool _isSubscribtion;
+        private bool _isSubscribtion = false;
 
         public bool IsSubscribtion
         {
             get {
                 return _isSubscribtion;
             }
+
+            set { _isSubscribtion = value; }
             
         }
 
@@ -181,9 +183,9 @@ namespace DesignGyakorlas.ViewModels
         }
 
         [JsonIgnore]
-        private string _itemAddedDatabaseDateString;
+        private string _itemAddedDatabaseDateString = DateTime.Now.ToString();
         [JsonIgnore]
-        public string ItemAddedDatabaseDateString
+        public string ItemAddedDatabaseDateString 
         {
             get { return _itemAddedDatabaseDateString; }
             set { _itemAddedDatabaseDateString = value; }

@@ -7,6 +7,6 @@ namespace DesignGyakorlas.Models
         public WalletItemModel[] Wallets { get; set; }
         public int SelectedWalletID { get; set; }
         public int CurrencyTypeNum { get; set; }
-       
+        public int DeletedWalletID { get; set; }
     }
 }

@@ -182,8 +182,11 @@ namespace DesignGyakorlas.ViewModels
                         SubscriptionTimeSpan = TimeSpan.FromDays(DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)),
                         SubscriptionTimeSpanDate = SubscriptionLastDate + SubscriptionTimeSpan,
                         MonthAdded = (int)DateTime.Now.Month,
-                        DayAdded = (int)DateTime.Now.Day
+                        DayAdded = (int)DateTime.Now.Day,
+                        
                     };
+
+                    ReturnModel.IsSubscribtion = true;
                   
                 }
 

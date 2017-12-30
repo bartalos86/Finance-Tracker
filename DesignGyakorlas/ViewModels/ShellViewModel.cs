@@ -27,7 +27,7 @@ namespace DesignGyakorlas.ViewModels
         {
            
             _windowHeight = 450;
-            Task.Factory.StartNew(LoadSavedItems);
+            Task.Factory.StartNew(() => LoadSavedItems(true));
 
           //  temporary.Add(new ItemViewModel("Kifli",5,0.05,0,new ItemTypeModel(null,null,itemType.DrinkAndFood),false));
             Items = temporary;
@@ -66,11 +66,13 @@ namespace DesignGyakorlas.ViewModels
                             MessageBox.Show("talalt");
                             itemToAdd.Count += temporary[temporary.IndexOf(item)].Count;
                             temporary.RemoveAt(temporary.IndexOf(item));
+                            fulltemporary.RemoveAt(fulltemporary.IndexOf(item));
                             break;
                         }
                         
                     }
                     temporary.Add(itemToAdd);
+                    fulltemporary.Add(itemToAdd);
                     CalculateBalance();
 
                     //Logika
@@ -96,7 +98,8 @@ namespace DesignGyakorlas.ViewModels
                     
                     temporary.Add(new ItemViewModel(incomeItemToAdd.IncomeName, 1, (double)incomeItemToAdd.SimpleMoney, 0, typeWithMoneyIcon, true)
                     { WalletID =  inputData.SelectedWalletID });//I didnt made a constructor for it but its the same
-                   
+                   fulltemporary.Add(new ItemViewModel(incomeItemToAdd.IncomeName, 1, (double)incomeItemToAdd.SimpleMoney, 0, typeWithMoneyIcon, true)
+                   { WalletID = inputData.SelectedWalletID });
                     CalculateBalance();
                 }
             }
@@ -119,7 +122,9 @@ namespace DesignGyakorlas.ViewModels
             previousItemIndex = _selectedIndex - 1;
             if (SelectedIndex != null)
             {
+                fulltemporary.RemoveAt(fulltemporary.IndexOf(SelectedItem));
                 _items.RemoveAt((int)SelectedIndex);
+                
                
                 if (previousItemIndex == -1 && Items.Count <= 1)
                     SelectedIndex = previousItemIndex + 1;
@@ -138,14 +143,15 @@ namespace DesignGyakorlas.ViewModels
         {
 
             SettingsMenuViewModel SettingsWindow = new SettingsMenuViewModel();
-            WindowManager manager = new WindowManager();
-            if(manager.ShowDialog(SettingsWindow) == true)
+            IWindowManager manager = new WindowManager();
+            if(manager.ShowDialog(SettingsWindow) == false)
             {
+              //  MessageBox.Show("mas");
                 if (SettingsWindow.IsWalletChanged)
                 {
-                  
-
-                    ChangeItems();
+                    //  MessageBox.Show("igen");
+                    RearrangeDatabase();
+                   
                 }
                     
             }
@@ -154,34 +160,10 @@ namespace DesignGyakorlas.ViewModels
         //TODO: kommentelesre szorul
         public void ExitButton()
         {
-            if (!Directory.Exists(savePath))
-                Directory.CreateDirectory(savePath);
+            
+            SaveItems();
 
-            var filesInFolder = Directory.GetFiles(savePath);
-            foreach(string file in filesInFolder)
-            {
-               File.Delete(file);
-            }
 
-            StreamWriter writer;
-            int itemIndex = 0;
-
-            foreach (var item in Items)
-            {
-                fulltemporary.Add(item);
-            }
-
-            foreach (var item in FullItems)
-            {
-
-                writer = new StreamWriter($"{savePath}{item.ItemName}{itemIndex}.mrk");
-                itemIndex++;
-                string serializedItemText = JsonConvert.SerializeObject(item, Formatting.Indented);
-   
-                 writer.Write(serializedItemText);
-               
-               writer.Close();
-            }
 
             this.TryClose();
         }
@@ -189,12 +171,59 @@ namespace DesignGyakorlas.ViewModels
 
         #region Metodusok
 
-        public void ChangeItems()
+        public async void RearrangeDatabase()
         {
-            foreach(var item in Items)
+            await Task.Factory.StartNew(() => LoadSettings());
+           await Task.Factory.StartNew(() => SaveItems());
+            Items.Clear();
+           Task.Factory.StartNew(() => LoadSavedItems(false));
+           
+        }
+
+        public void SaveItems()
+        {
+            if (!Directory.Exists(savePath))
+                Directory.CreateDirectory(savePath);
+
+            var filesInFolder = Directory.GetFiles(savePath);
+            foreach (string file in filesInFolder)
             {
-             //   Items.Where(i => i.WalletID != inputData.SelectedWalletID);
+                File.Delete(file);
             }
+
+            StreamWriter writer;
+            int itemIndex = 0;
+
+          
+            foreach (var item in FullItems.Distinct())
+            {
+                if(inputData.DeletedWalletID != -1)
+                {
+                    if (item.WalletID != inputData.DeletedWalletID)
+                    {
+                        writer = new StreamWriter($"{savePath}{item.ItemName}{itemIndex}.mrk");
+                        itemIndex++;
+                        string serializedItemText = JsonConvert.SerializeObject(item, Formatting.Indented);
+
+                        writer.Write(serializedItemText);
+
+                        writer.Close();
+                    }
+                }
+                else
+                {
+                    writer = new StreamWriter($"{savePath}{item.ItemName}{itemIndex}.mrk");
+                    itemIndex++;
+                    string serializedItemText = JsonConvert.SerializeObject(item, Formatting.Indented);
+
+                    writer.Write(serializedItemText);
+
+                    writer.Close();
+                }
+               
+               
+            }
+            FullItems.Clear();
         }
 
         public void LoadSettings()
@@ -220,7 +249,7 @@ namespace DesignGyakorlas.ViewModels
         }
 
         //TODO: kommentelesre szorul, megcsinalni hogy csak a .mrk nevu fajlokat vegye figyelembe
-        private void LoadSavedItems()
+        private void LoadSavedItems(bool isAppLoad)
         {
 
             LoadSettings();
@@ -256,18 +285,34 @@ namespace DesignGyakorlas.ViewModels
                         {
                             if(inputData.SelectedWalletID == tempBeforeAdd.WalletID)
                             temporary.Add(tempBeforeAdd);
-                            else
-                            fulltemporary.Add(tempBeforeAdd);
+
+                           // if(inputData.DeletedWalletID == -1)
+                          //  {
+                                if (!fulltemporary.Contains(tempBeforeAdd))
+                                    fulltemporary.Add(tempBeforeAdd);
+                           // }
+                            //else
+                            //{
+                            //    if (!fulltemporary.Contains(tempBeforeAdd) && tempBeforeAdd.WalletID != inputData.DeletedWalletID)
+                            //        fulltemporary.Add(tempBeforeAdd);
+                            //}
+                          
+                                
                         }
                           
                        //changed
                         else
                         {
                             if (inputData.SelectedWalletID == tempBeforeAdd.WalletID)
+                            {
                                 temporary.Insert(subIndexCounter, tempBeforeAdd);
-                            else
-                            fulltemporary.Insert(subIndexCounter, tempBeforeAdd);
-                            subIndexCounter++;
+                                
+                                subIndexCounter++;
+                            }
+                               
+                            if (!fulltemporary.Contains(tempBeforeAdd))
+                                fulltemporary.Add(tempBeforeAdd);
+                          
                         }
                             
                     }
@@ -322,10 +367,13 @@ namespace DesignGyakorlas.ViewModels
                   //  MessageBox.Show("Bad item file detected it wont be initialized and will be deleted upon exit");
                 }
 
-               
 
+                subIndexCounter = 0;
                 dataReader.Close();
-                Thread.Sleep(200);
+                if (isAppLoad)
+                    Thread.Sleep(150);
+                else
+                    Thread.Sleep(25);
             }
 
         }
