@@ -160,7 +160,7 @@ namespace DesignGyakorlas.ViewModels
 
         public void ExitButton()
         {
-           
+            ReturnData = inputDataLocal;
             this.TryClose();
         }
      

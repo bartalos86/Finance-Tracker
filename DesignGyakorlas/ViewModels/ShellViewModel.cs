@@ -167,13 +167,13 @@ namespace DesignGyakorlas.ViewModels
         public void ExitButton()
         {
             
-            SaveItems();
+            Task.Factory.StartNew(() => SaveItems());
             SaveSettings();
             this.TryClose();
         }
 
 
-        #region Metodusok
+            #region Metodusok
 
         public async void RearrangeDatabase()
         {
@@ -238,8 +238,7 @@ namespace DesignGyakorlas.ViewModels
 
             if (!Directory.Exists($"{Directory.GetCurrentDirectory()}\\Settings"))
                 Directory.CreateDirectory($"{Directory.GetCurrentDirectory()}\\Settings");
-
-
+            
             if (File.Exists(saveDir))
             {
                 StreamReader stRead = new StreamReader(saveDir);
@@ -271,27 +270,21 @@ namespace DesignGyakorlas.ViewModels
                 rawJson = null;
             }
 
-
-
             if (rawJson != null)
             {
                 inputData = JsonConvert.DeserializeObject<SettingsDataModel>(rawJson);
             }
-           
+
+            currentlySelectedWallet = inputData.Wallets.Single(wallet => wallet.WalletID == inputData.SelectedWalletID);
+
         }
 
         public void SaveSettings()
         {
             string saveItem = $"{Directory.GetCurrentDirectory()}\\Settings\\settings.json";
-           
-
+ 
             StreamWriter saveWriter = new StreamWriter(saveItem);
-
-           
-
             string serializedData = JsonConvert.SerializeObject(inputData);
-
-           
 
             saveWriter.Write(serializedData);
             saveWriter.Dispose();
