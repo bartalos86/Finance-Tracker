@@ -21,30 +21,11 @@ namespace DesignGyakorlas.ViewModels
     {
         BindableCollection<CurrencyTypeModel> tempCurrencies = new BindableCollection<CurrencyTypeModel>();
         BindableCollection<WalletItemModel> tempWallets = new BindableCollection<WalletItemModel>();
-        SettingsDataModel inputData = new SettingsDataModel();
+        SettingsDataModel  inputDataLocal = new SettingsDataModel();
         bool IsInputDataValid;
        
-        public SettingsMenuViewModel()
+        public SettingsMenuViewModel(SettingsDataModel inputData)
         {
-            //Load 
-            string saveDir = $"{Directory.GetCurrentDirectory()}\\Settings\\settings.json";
-            string rawJson;
-
-            if (File.Exists(saveDir))
-            {
-                StreamReader stRead = new StreamReader(saveDir);
-                rawJson = stRead.ReadToEnd();
-                stRead.Dispose();
-            }
-            else { rawJson = null; }
-
-            SettingsDataModel inputData = new SettingsDataModel();
-
-            if (rawJson != null)
-            {
-                inputData = JsonConvert.DeserializeObject<SettingsDataModel>(rawJson);
-            }
-            else { inputData = null; }
 
             //Base
             AddWalletCommand = new CommandHandler(() => AddWallet());
@@ -53,21 +34,7 @@ namespace DesignGyakorlas.ViewModels
             tempCurrencies.Add(new CurrencyTypeModel(CurrencyType.USD));
             tempCurrencies.Add(new CurrencyTypeModel(CurrencyType.BTC));
 
-           
-
-            //if (inputData == null)
-            //{
-            //    IsInputDataValid = false;
-            ////    tempWallets.Add(new WalletItemModel() {
-            ////        ImageSource = "/DesignGyakorlas;component/Images/Icons/wallet.png",
-            ////        ItemText = "Default",
-            ////        WalletID = 0
-
-            ////});
-
-            //    _selectedWallet = tempWallets[0];
-            //    _selectedCurrency = tempCurrencies[0];
-            //}
+        
             if (inputData != null && inputData.Wallets != null)
                 IsInputDataValid = true;
 
@@ -77,15 +44,15 @@ namespace DesignGyakorlas.ViewModels
                 {
                     tempWallets.Add(wallet);
                 }
-
-                this.inputData = inputData;
-
+                inputDataLocal = inputData;
+              
+               
                 _selectedWallet = tempWallets.Single(wallet => wallet.WalletID == inputData.SelectedWalletID);
                 _selectedCurrency = tempCurrencies.Single(i => i.Type == (CurrencyType)inputData.CurrencyTypeNum);
             }
 
 
-
+            inputData = inputDataLocal;
             _currencyTypeComboBox = tempCurrencies;
             _wallets = tempWallets;
 
@@ -163,9 +130,11 @@ namespace DesignGyakorlas.ViewModels
                 DeletedWalletID = DeletedWalletId
             };
 
+            ReturnData = dataForSerialization;
+
             string serializedData = JsonConvert.SerializeObject(dataForSerialization);
 
-            if (inputData.SelectedWalletID != SelectedWallet.WalletID)
+            if (inputDataLocal.SelectedWalletID != SelectedWallet.WalletID)
                 IsWalletChanged = true;
             
             saveWriter.Write(serializedData);
@@ -264,9 +233,17 @@ namespace DesignGyakorlas.ViewModels
             set { deletedWalletId = value; }
         }
 
+        private SettingsDataModel _returnData;
+
+        public SettingsDataModel ReturnData
+        {
+            get { return _returnData; }
+            set { _returnData = value; }
+        }
 
 
         public CommandHandler AddWalletCommand { get; set; }
+        public CommandHandler OkButtonCommand { get; set; }
         #endregion
     }
 }

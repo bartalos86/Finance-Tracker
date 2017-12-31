@@ -21,6 +21,7 @@ namespace DesignGyakorlas.ViewModels
         string savePath = $"{Directory.GetCurrentDirectory()}/Saves/";
         int? previousItemIndex;
         int subIndexCounter = 0;
+        WalletItemModel currentlySelectedWallet;
         #endregion
         //Constructor
         public ShellViewModel()
@@ -29,13 +30,8 @@ namespace DesignGyakorlas.ViewModels
             _windowHeight = 450;
             Task.Factory.StartNew(() => LoadSavedItems(true));
 
-          //  temporary.Add(new ItemViewModel("Kifli",5,0.05,0,new ItemTypeModel(null,null,itemType.DrinkAndFood),false));
             Items = temporary;
             FullItems = fulltemporary;
-            //   CurrentMoney = CalculateBalance();
-           // CalculateBalance();
-          
-
         }
 
        void Teszt()
@@ -71,7 +67,8 @@ namespace DesignGyakorlas.ViewModels
                         }
                         
                     }
-                    inputData.Wallets.Single(wallet => wallet.WalletID == inputData.SelectedWalletID).Money += itemToAdd.Money * itemToAdd.Count;
+                    // inputData.Wallets.Single(wallet => wallet.WalletID == inputData.SelectedWalletID).Money += itemToAdd.Money * itemToAdd.Count;
+                    currentlySelectedWallet.Money += itemToAdd.Money * itemToAdd.Count;
                     temporary.Add(itemToAdd);
                     fulltemporary.Add(itemToAdd);
                     CalculateBalance();
@@ -101,7 +98,8 @@ namespace DesignGyakorlas.ViewModels
                     temporary.Add(convertedItemToAdd);//I didnt made a constructor for it but its the same
                     fulltemporary.Add(convertedItemToAdd);
 
-                    inputData.Wallets.Single(wallet => wallet.WalletID == inputData.SelectedWalletID).Money += convertedItemToAdd.Money;
+                    //  inputData.Wallets.Single(wallet => wallet.WalletID == inputData.SelectedWalletID).Money += convertedItemToAdd.Money;
+                    currentlySelectedWallet.Money += convertedItemToAdd.Money;
                     CalculateBalance();
                 }
             }
@@ -124,14 +122,13 @@ namespace DesignGyakorlas.ViewModels
             previousItemIndex = _selectedIndex - 1;
             if (SelectedIndex != null)
             {
+                // inputData.Wallets.Single(wallet => wallet.WalletID == inputData.SelectedWalletID).Money -= SelectedItem.Money;
+                currentlySelectedWallet.Money -= SelectedItem.Money;
+
+                CalculateBalance();
+
                 fulltemporary.RemoveAt(fulltemporary.IndexOf(SelectedItem));
                 _items.RemoveAt((int)SelectedIndex);
-
-                if (SelectedItem.IsIncome)
-                    inputData.Wallets.Single(wallet => wallet.WalletID == inputData.SelectedWalletID).Money -= SelectedItem.Money;
-                else
-                    inputData.Wallets.Single(wallet => wallet.WalletID == inputData.SelectedWalletID).Money += SelectedItem.Money;
-
 
                 if (previousItemIndex == -1 && Items.Count <= 1)
                     SelectedIndex = previousItemIndex + 1;
@@ -148,17 +145,19 @@ namespace DesignGyakorlas.ViewModels
         SettingsDataModel inputData = new SettingsDataModel(); //TODO eltuntentni ezt innen
         public void SettingsShowButton()
         {
-            SaveSettings();
-            SettingsMenuViewModel SettingsWindow = new SettingsMenuViewModel();
+            //SaveSettings();
+            SettingsMenuViewModel SettingsWindow = new SettingsMenuViewModel(inputData);
             IWindowManager manager = new WindowManager();
             if(manager.ShowDialog(SettingsWindow) == false)
             {
-              //  MessageBox.Show("mas");
+                 // MessageBox.Show("mas");
+                inputData = SettingsWindow.ReturnData;
+           
                 if (SettingsWindow.IsWalletChanged)
                 {
-                    //  MessageBox.Show("igen");
+                     
                     RearrangeDatabase();
-                   
+                    currentlySelectedWallet = inputData.Wallets.Single(wallet => wallet.WalletID == inputData.SelectedWalletID);
                 }
                     
             }
@@ -170,8 +169,6 @@ namespace DesignGyakorlas.ViewModels
             
             SaveItems();
             SaveSettings();
-
-
             this.TryClose();
         }
 
@@ -180,7 +177,7 @@ namespace DesignGyakorlas.ViewModels
 
         public async void RearrangeDatabase()
         {
-            await Task.Factory.StartNew(() => LoadSettings());
+            //await Task.Factory.StartNew(() => LoadSettings());
             CalculateStatistics();
            await Task.Factory.StartNew(() => SaveItems());
             Items.Clear();
@@ -236,8 +233,6 @@ namespace DesignGyakorlas.ViewModels
 
         public void LoadSettings()
         {
-
-
             string saveDir = $"{Directory.GetCurrentDirectory()}\\Settings\\settings.json";
             string rawJson;
 
@@ -269,7 +264,8 @@ namespace DesignGyakorlas.ViewModels
 
                 string jsonToWrite = JsonConvert.SerializeObject(settingsDataToSerialize, Formatting.Indented);
                 inputData = settingsDataToSerialize;
-                MessageBox.Show(inputData.SelectedWalletID.ToString());
+                currentlySelectedWallet = inputData.Wallets.Single(wallet => wallet.WalletID == inputData.SelectedWalletID);
+              //  MessageBox.Show(inputData.SelectedWalletID.ToString());
                 settingsWrt.Write(jsonToWrite);
                 settingsWrt.Dispose();
                 rawJson = null;
@@ -291,7 +287,7 @@ namespace DesignGyakorlas.ViewModels
 
             StreamWriter saveWriter = new StreamWriter(saveItem);
 
-            inputData.Wallets.Single(wallet => wallet.WalletID == inputData.SelectedWalletID).Money = CurrentMoney;
+           
 
             string serializedData = JsonConvert.SerializeObject(inputData);
 
@@ -304,7 +300,7 @@ namespace DesignGyakorlas.ViewModels
         //TODO: kommentelesre szorul, megcsinalni hogy csak a .mrk nevu fajlokat vegye figyelembe
         private void LoadSavedItems(bool isAppLoad)
         {
-
+            if(isAppLoad)
             LoadSettings();
 
             if (!Directory.Exists(savePath))
@@ -387,10 +383,10 @@ namespace DesignGyakorlas.ViewModels
                             if(elapsedExtraMonths > 0)
                                 inputData.Wallets.Single(wallet => wallet.WalletID == tempBeforeAdd.WalletID).Money += tempBeforeAdd.Money * tempBeforeAdd.Count * elapsedExtraMonths;
 
-                            MessageBox.Show(elapsedExtraMonths.ToString());
+                          //  MessageBox.Show(elapsedExtraMonths.ToString());
                             CalculateBalance();
                             tempBeforeAdd.DateManager.SubscriptionLastDate = DateTime.Now.Date;
-                            MessageBox.Show("money has been added or subtracted");
+                          //  MessageBox.Show("money has been added or subtracted");
                         }
                     }
                 }

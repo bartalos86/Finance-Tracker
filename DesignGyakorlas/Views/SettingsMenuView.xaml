@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DesignGyakorlas.Views"
         mc:Ignorable="d"
+         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:cal="http://www.caliburnproject.org"
         Title="SettingsMenuView" Height="270" Width="550">
     <WindowChrome.WindowChrome>
         <WindowChrome x:Name="chrome" ResizeBorderThickness="10"/>
@@ -111,11 +113,12 @@
                         FontWeight="Bold" FontSize="17" VerticalAlignment="Center" Text="{Binding WalletNameText}"/>
 
             <Button x:Name="OkButton" Grid.Column="5" Grid.Row="4"
-                    Style="{StaticResource alapBtn}" Content="Ok"
-                    FontWeight="Bold"  FontSize="19" Grid.RowSpan="2" MaxHeight="35"
-                   />
+                    Style="{StaticResource alapBtn}" Content="Ok" 
+                    FontWeight="Bold"  FontSize="19" Grid.RowSpan="2" MaxHeight="35"/>
 
-           
+
+
+
 
 
 
