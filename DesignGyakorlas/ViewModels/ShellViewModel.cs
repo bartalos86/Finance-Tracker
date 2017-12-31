@@ -164,10 +164,10 @@ namespace DesignGyakorlas.ViewModels
         }
 
         //TODO: kommentelesre szorul
-        public void ExitButton()
+        public async void ExitButton()
         {
             
-            Task.Factory.StartNew(() => SaveItems());
+            await Task.Factory.StartNew(() => SaveItems());
             SaveSettings();
             this.TryClose();
         }
