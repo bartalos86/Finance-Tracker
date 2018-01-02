@@ -87,6 +87,7 @@
             <ComboBox  Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2" MaxHeight="30" 
                       ItemsSource="{Binding Path=Wallets, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       SelectedIndex="{Binding SelectedWalletIndex,Mode=TwoWay, UpdateSourceTrigger=Default}"
+                       cal:Message.Attach="[Event SelectionChanged] = [Action WalletSelectionChanged()]"
                       Style="{StaticResource ComboBoxDefault}" SelectedItem="{Binding Path=SelectedWallet, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
 
                 <ComboBox.ItemTemplate>
@@ -98,6 +99,7 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
 
+                
             </ComboBox>
 
             <Button x:Name="AddWalletButton" Grid.Column="4" Grid.Row="3" Content="+" Style="{StaticResource transparentButton}"
@@ -111,6 +113,12 @@
             <TextBox Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource TextWalletAdd}"
                        Height="31" Margin="35,0,0,0" Visibility="{Binding IsAddingWallet, Mode=OneWay}"
                         FontWeight="Bold" FontSize="17" VerticalAlignment="Center" Text="{Binding WalletNameText}"/>
+
+
+            <TextBlock x:Name="MoneyInWalletText" Text="{Binding Path=MoneyInWalletText, StringFormat=Money in curren wallet:{0}}"
+                       Grid.Column="1" Grid.Row="5"
+                       HorizontalAlignment="Left" Foreground="White"
+                       FontWeight="Bold" FontSize="21" Grid.ColumnSpan="3"/>
 
             <Button x:Name="OkButton" Grid.Column="5" Grid.Row="4"
                     Style="{StaticResource alapBtn}" Content="Ok" 

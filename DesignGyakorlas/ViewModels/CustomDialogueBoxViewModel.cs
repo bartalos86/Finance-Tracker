@@ -36,7 +36,10 @@ namespace DesignGyakorlas.ViewModels
 
         public void SecondButtonCommand()
         {
+            if(SecondButtonCommandProp != null)
             SecondButtonCommandProp.ExecuteWithoutParameter();
+
+            this.TryClose();
         }
 
         public void ExitButton()

@@ -138,6 +138,7 @@
       <DependentUpon>designgyakorlasappDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="Functions\DataAcess.cs" />
+    <Compile Include="Models\BaseComboItem.cs" />
     <Compile Include="Models\CurrencyTypeModel.cs" />
     <Compile Include="Models\Converters\PolarToColorConverter.cs" />
     <Compile Include="Models\DateManagerModel.cs" />
@@ -360,10 +361,16 @@
     <Content Include="Images\Styling\checked.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\Styling\checked1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\Styling\checkmark.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Styling\notchecked.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Styling\notchecked1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Styling\redx.png">

@@ -263,7 +263,7 @@ namespace DesignGyakorlas.ViewModels
 
                 string jsonToWrite = JsonConvert.SerializeObject(settingsDataToSerialize, Formatting.Indented);
                 inputData = settingsDataToSerialize;
-                currentlySelectedWallet = inputData.Wallets.Single(wallet => wallet.WalletID == inputData.SelectedWalletID);
+                
              
                 settingsWrt.Write(jsonToWrite);
                 settingsWrt.Dispose();

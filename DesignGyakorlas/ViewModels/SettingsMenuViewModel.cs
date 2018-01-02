@@ -55,12 +55,16 @@ namespace DesignGyakorlas.ViewModels
             inputData = inputDataLocal;
             _currencyTypeComboBox = tempCurrencies;
             _wallets = tempWallets;
+            WalletSelectionChanged();
 
         }
 
         public void AddWalletButton()
         {
-            IsAddingWallet = Visibility.Visible;
+            if (IsAddingWallet == Visibility.Hidden)
+                IsAddingWallet = Visibility.Visible;
+            else
+                IsAddingWallet = Visibility.Hidden;
         }
 
         public void AddWallet()
@@ -81,6 +85,7 @@ namespace DesignGyakorlas.ViewModels
 
         public void RemoveWalletButton()
         {
+            IsAddingWallet = Visibility.Hidden;
             // MessageBox.Show(SelectedWalletIndex.ToString());
             if (SelectedWalletIndex != -1 && Wallets.Count != 1)
             {
@@ -104,7 +109,7 @@ namespace DesignGyakorlas.ViewModels
            
             Wallets = tempWallets;
 
-           
+          
 
         }
 
@@ -113,15 +118,15 @@ namespace DesignGyakorlas.ViewModels
             if (SelectedWalletIndex == -1)
                 SelectedWalletIndex = 0;
 
-            string saveDir = $"{Directory.GetCurrentDirectory()}\\Settings";
-            string saveItem = $"{Directory.GetCurrentDirectory()}\\Settings\\settings.json";
-            if (!Directory.Exists(saveDir))
-                Directory.CreateDirectory(saveDir);
+            //string saveDir = $"{Directory.GetCurrentDirectory()}\\Settings";
+            //string saveItem = $"{Directory.GetCurrentDirectory()}\\Settings\\settings.json";
+            //if (!Directory.Exists(saveDir))
+            //    Directory.CreateDirectory(saveDir);
 
-            if (!File.Exists(saveItem))
-                File.Create(saveItem).Dispose();
+            //if (!File.Exists(saveItem))
+            //    File.Create(saveItem).Dispose();
 
-            StreamWriter saveWriter = new StreamWriter(saveItem);
+            //StreamWriter saveWriter = new StreamWriter(saveItem);
             SettingsDataModel dataForSerialization = new SettingsDataModel()
             {
                 Wallets = tempWallets.ToArray(),
@@ -132,26 +137,15 @@ namespace DesignGyakorlas.ViewModels
 
             ReturnData = dataForSerialization;
 
-            string serializedData = JsonConvert.SerializeObject(dataForSerialization);
+            //string serializedData = JsonConvert.SerializeObject(dataForSerialization);
 
             if (inputDataLocal.SelectedWalletID != SelectedWallet.WalletID)
                 IsWalletChanged = true;
             
-            saveWriter.Write(serializedData);
-            saveWriter.Dispose();
+            //saveWriter.Write(serializedData);
+            //saveWriter.Dispose();
             //Show Dialog
-            //if (IsWalletChanged)
-            //{
-            //    IWindowManager manager1 = new WindowManager();
-            //    manager1.ShowWindow(new CustomDialogueBoxViewModel(new DialogDataModel()
-            //    {
-            //        Title = "Warning!",
-            //        Message = "If you add item now it will go to the old wallet, you can add new items only after resatart",
-            //        OkButtonText = "I agree",
-            //        SecondButtonNeeded = false,
-
-            //    }));
-            //}
+           
 
             //if (IsWalletChanged)
             //    MessageBox.Show("valtozott");
@@ -161,9 +155,49 @@ namespace DesignGyakorlas.ViewModels
         public void ExitButton()
         {
             ReturnData = inputDataLocal;
+
+            //if (IsWalletChanged)
+            //{
+            //    //WindowManager manager1 = new WindowManager();
+            //    //CustomDialogueBoxViewModel window = new CustomDialogueBoxViewModel(new DialogDataModel()
+            //    //{
+            //    //    Title = "Warning!",
+            //    //    Message = "You changed a wallet and you havent applied the changes,Do you want to leave without appliing?",
+            //    //    OkButtonText = "YES!",
+            //    //    SecondButtonText = "NO!",
+            //    //    SecondButtonNeeded = true,
+                    
+            //    //});
+
+            //    //manager1.ShowDialog(window);
+            //  //      this.TryClose();
+            //}
+            
             this.TryClose();
+
         }
-     
+
+       
+
+        public void WalletSelectionChanged()
+        {
+            if(SelectedWallet != null)
+            switch (SelectedCurrency.Type)
+            {
+                case CurrencyType.EUR:
+                    MoneyInWalletText = $" {SelectedWallet.Money.ToString()}€";
+                    break;
+                case CurrencyType.USD:
+                    MoneyInWalletText = $" {SelectedWallet.Money.ToString()}$";
+                    break;
+                case CurrencyType.BTC:
+                    MoneyInWalletText = $" {SelectedWallet.Money.ToString()}BTC";
+                    break;
+            }
+            if (SelectedWallet.WalletID != inputDataLocal.SelectedWalletID)
+                IsWalletChanged = true;
+        }
+
 
         #region Properties
         private BindableCollection<CurrencyTypeModel> _currencyTypeComboBox;
@@ -241,9 +275,18 @@ namespace DesignGyakorlas.ViewModels
             set { _returnData = value; }
         }
 
+        private string _moneyInWalletText;
+
+        public string MoneyInWalletText
+        {
+            get { return _moneyInWalletText; }
+            set { _moneyInWalletText = value; NotifyOfPropertyChange(() => MoneyInWalletText); }
+        }
+
 
         public CommandHandler AddWalletCommand { get; set; }
         public CommandHandler OkButtonCommand { get; set; }
+        public CommandHandler CommandCloseWindow { get; set; }
         #endregion
     }
 }

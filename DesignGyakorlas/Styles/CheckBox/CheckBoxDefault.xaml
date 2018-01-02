@@ -13,10 +13,10 @@
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="false">
-                            <Setter TargetName="Image" Property="Source" Value="/DesignGyakorlas;component/Images/Styling/notchecked.png"/>
+                            <Setter TargetName="Image" Property="Source" Value="/DesignGyakorlas;component/Images/Styling/notchecked1.png"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="true">
-                            <Setter TargetName="Image" Property="Source" Value="/DesignGyakorlas;component/Images/Styling/checked.png"/>
+                            <Setter TargetName="Image" Property="Source" Value="/DesignGyakorlas;component/Images/Styling/checked1.png"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
