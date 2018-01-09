@@ -22,6 +22,7 @@ namespace DesignGyakorlas.ViewModels
         int? previousItemIndex;
         int subIndexCounter = 0;
         WalletItemModel currentlySelectedWallet;
+        string currentCurrencySymbol;
         #endregion
         //Constructor
         public ShellViewModel()
@@ -152,7 +153,26 @@ namespace DesignGyakorlas.ViewModels
             {
                  // MessageBox.Show("mas");
                 inputData = SettingsWindow.ReturnData;
-           
+
+                switch (inputData.CurrencyTypeNum)
+                {
+                    case 0:
+                        currentCurrencySymbol = "$";
+                        CurrentlySelectedCurrency = "$";
+                        CalculateBalance();
+                        break;
+                    case 1:
+                        currentCurrencySymbol = "€";
+                        CurrentlySelectedCurrency = "€";
+                        CalculateBalance();
+                        break;
+                    case 2:
+                        currentCurrencySymbol = "BTC";
+                        CurrentlySelectedCurrency = "BTC";
+                        CalculateBalance();
+                        break;
+                }
+
                 if (SettingsWindow.IsWalletChanged)
                 {
                      
@@ -182,6 +202,8 @@ namespace DesignGyakorlas.ViewModels
            await Task.Factory.StartNew(() => SaveItems());
             Items.Clear();
            Task.Factory.StartNew(() => LoadSavedItems(false));
+
+            
            
         }
 
@@ -258,7 +280,9 @@ namespace DesignGyakorlas.ViewModels
                     ItemText = "Default",
                     WalletID = 0,
                     Money = 0} },
-                    CurrencyTypeNum = 1
+                    CurrencyTypeNum = 1,
+                    
+
                 };
 
                 string jsonToWrite = JsonConvert.SerializeObject(settingsDataToSerialize, Formatting.Indented);
@@ -276,6 +300,26 @@ namespace DesignGyakorlas.ViewModels
             }
 
             currentlySelectedWallet = inputData.Wallets.Single(wallet => wallet.WalletID == inputData.SelectedWalletID);
+
+            //Sets the currently selected currency
+            switch (inputData.CurrencyTypeNum)
+            {
+                case 0:
+                    currentCurrencySymbol = "$";
+                    CurrentlySelectedCurrency = "$";
+                    CalculateBalance();
+                    break;
+                case 1:
+                    currentCurrencySymbol = "€";
+                    CurrentlySelectedCurrency = "€";
+                    CalculateBalance();
+                    break;
+                case 2:
+                    currentCurrencySymbol = "BTC";
+                    CurrentlySelectedCurrency = "BTC";
+                    CalculateBalance();
+                    break;
+            }
 
         }
 
@@ -441,6 +485,8 @@ namespace DesignGyakorlas.ViewModels
            // CurrentMoney = totalBalance;
            //TODO lehet le kene egyszerusiten, tul nehez igy a gepnek
             CurrentMoney = inputData.Wallets.Single(wallet => wallet.WalletID == inputData.SelectedWalletID).Money;
+            BalanceText = $"{CurrentMoney}{currentCurrencySymbol}";
+         
         }
         //TODO: kommentelesre szorul
         private StatisticsDataModel CalculateStatistics()
@@ -546,7 +592,7 @@ namespace DesignGyakorlas.ViewModels
             //TODO:megtisztitani a folosleges propertiesektol
             #region Properties
 
-        private double? _currentMoney;
+        private double? _currentMoney = 0;
 
         public double? CurrentMoney
         {
@@ -620,7 +666,23 @@ namespace DesignGyakorlas.ViewModels
             get { return _windowHeight; }
             set { _windowHeight = value; NotifyOfPropertyChange(() => WindowHeight); }
         }
-      
+
+
+        private string _balanceText;
+
+        public string BalanceText
+        {
+            get { return _balanceText; }
+            set { _balanceText = value;NotifyOfPropertyChange(() => BalanceText); }
+        }
+
+        private string _currentlySelectedCurrency = "$";
+
+        public string CurrentlySelectedCurrency
+        {
+            get { return _currentlySelectedCurrency; }
+            set { _currentlySelectedCurrency = value;NotifyOfPropertyChange(() => CurrentlySelectedCurrency); }
+        }
 
         #endregion
     }

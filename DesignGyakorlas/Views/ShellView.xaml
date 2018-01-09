@@ -4,13 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DesignGyakorlas.Views"
-        mc:Ignorable="d"
+        mc:Ignorable="d" x:Name="Window"
         Title="ShellView" Height="{Binding WindowHeight ,Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged}" Width="700">
 
     <WindowChrome.WindowChrome>
         <WindowChrome x:Name="chrome" ResizeBorderThickness="6"/>
     </WindowChrome.WindowChrome>
-
+    <Window.Resources>
+        
+    </Window.Resources>
     <Grid>
 
         <Grid.Background >
@@ -64,7 +66,7 @@
 
             </Grid.RowDefinitions>
 
-            <TextBlock x:Name="CurrentMoney" Text="{Binding Path=CurrentMoney, StringFormat=Balace: €{0}}"
+            <TextBlock x:Name="CurrentMoney" Text="{Binding Path=BalanceText, StringFormat=Balace: {0}}"
                        Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Foreground="#FF35B935"
                        FontSize="27" HorizontalAlignment="Center" FontWeight="Bold"/>
 
@@ -119,7 +121,14 @@
                         <GridViewColumn Header="Money" Width="75">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock  Text="{Binding Money, StringFormat=€{0} }"/>
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat=" {0} {1}">
+                                                <Binding Path="Money"/>
+                                                <Binding RelativeSource="{RelativeSource AncestorType={x:Type Window}}" Path="DataContext.CurrentlySelectedCurrency"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

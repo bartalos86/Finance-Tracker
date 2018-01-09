@@ -52,7 +52,7 @@ namespace DesignGyakorlas.ViewModels
             }
 
 
-            inputData = inputDataLocal;
+           // inputData = inputDataLocal;
             _currencyTypeComboBox = tempCurrencies;
             _wallets = tempWallets;
             WalletSelectionChanged();
@@ -133,6 +133,7 @@ namespace DesignGyakorlas.ViewModels
                 CurrencyTypeNum = (int)SelectedCurrency.Type,
                 SelectedWalletID = SelectedWallet.WalletID,
                 DeletedWalletID = DeletedWalletId
+
             };
 
             ReturnData = dataForSerialization;
