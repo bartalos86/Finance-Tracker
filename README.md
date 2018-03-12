@@ -22,8 +22,8 @@
 
 Release | Download Source
 --------|--------
-**FinanceTracker V1 x64** | [**Download**](https://drive.google.com/file/d/1yDz17rvBM1wS1XUC3qMFOJ1EHyUe9PwS/view?usp=sharing)
-**FinanceTracker V1 x86** | [**Download**](https://drive.google.com/file/d/1aSZwu2laASkXG5py3Dw6QHmw9C1bdH7Y/view?usp=sharing)
+**FinanceTracker V1.1 x64** | [**Download**](https://drive.google.com/file/d/1yDz17rvBM1wS1XUC3qMFOJ1EHyUe9PwS/view?usp=sharing)
+**FinanceTracker V1.1 x86** | [**Download**](https://drive.google.com/file/d/1aSZwu2laASkXG5py3Dw6QHmw9C1bdH7Y/view?usp=sharing)
 
 ### **Sample Images**
 
