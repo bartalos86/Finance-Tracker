@@ -4,7 +4,7 @@
 
 ### **Features:**
 
-- Connect to autocomplete item database and add frequently used item to the databse to add item quicker( currently not working because no `mySLQ` hosting)
+- Connect to autocomplete item database and add frequently used item to the databse to add item quicker( currently not working because no `mySQL` hosting)
 - Track expenses
 - Basic statistics(making it better)
 - You can add incomes too
@@ -22,8 +22,8 @@
 
 Release | Download Source
 --------|--------
-**FinanceTracker V1 x64** | [**Download**](https://drive.google.com/file/d/1P2bmuRiCi9Ih0BSHO-1wBa5WaE98PAKr/view?usp=sharing)
-**FinanceTracker V1 x86** | [**Download**](https://drive.google.com/file/d/1MSYeT2MoZcDhsQIErCNg_BlnlyOTygh9/view?usp=sharing)
+**FinanceTracker V1 x64** | [**Download**](https://drive.google.com/file/d/1yDz17rvBM1wS1XUC3qMFOJ1EHyUe9PwS/view?usp=sharing)
+**FinanceTracker V1 x86** | [**Download**](https://drive.google.com/file/d/1aSZwu2laASkXG5py3Dw6QHmw9C1bdH7Y/view?usp=sharing)
 
 ### **Sample Images**
 
