@@ -265,7 +265,7 @@ namespace DesignGyakorlas.ViewModels
                 string jsonToWrite = JsonConvert.SerializeObject(settingsDataToSerialize, Formatting.Indented);
                 inputData = settingsDataToSerialize;
                 currentlySelectedWallet = inputData.Wallets.Single(wallet => wallet.WalletID == inputData.SelectedWalletID);
-              //  MessageBox.Show(inputData.SelectedWalletID.ToString());
+             
                 settingsWrt.Write(jsonToWrite);
                 settingsWrt.Dispose();
                 rawJson = null;
@@ -343,7 +343,7 @@ namespace DesignGyakorlas.ViewModels
                                 
                         }
                           
-                       //changed
+                       
                         else
                         {
                             if (inputData.SelectedWalletID == tempBeforeAdd.WalletID)
@@ -367,25 +367,30 @@ namespace DesignGyakorlas.ViewModels
                     //! Ez a Subscribtion rendsyer a penzhozzaadashoz
                     if (tempBeforeAdd.DateManager != null)
                     {
-                        if (tempBeforeAdd.DateManager.SubscriptionLastDate.Date < DateTime.Now.Date && tempBeforeAdd.DateManager.DayAdded <= DateTime.Now.Day
-                            &&( tempBeforeAdd.DateManager.SubscriptionLastDate.Month < DateTime.Now.Month || tempBeforeAdd.DateManager.SubscriptionLastDate.Year < DateTime.Now.Year) )
+                        //if (tempBeforeAdd.DateManager.SubscriptionLastDate.Date < DateTime.Now.Date && (tempBeforeAdd.DateManager.DayAdded <= DateTime.Now.Day ||tempBeforeAdd.DateManager.DayAdded > dateti)
+                        //    &&( tempBeforeAdd.DateManager.SubscriptionLastDate.Month < DateTime.Now.Month || tempBeforeAdd.DateManager.SubscriptionLastDate.Year < DateTime.Now.Year) )
+                        if (tempBeforeAdd.DateManager.SubscriptionLastDate.Date < DateTime.Now.Date)
                         {
                             //levonni a penzbol tempBeforeAdd.money
-                            inputData.Wallets.Single(wallet => wallet.WalletID == tempBeforeAdd.WalletID).Money += tempBeforeAdd.Money * tempBeforeAdd.Count;
+                            
+                           // inputData.Wallets.Single(wallet => wallet.WalletID == tempBeforeAdd.WalletID).Money += tempBeforeAdd.Money * tempBeforeAdd.Count;
 
-                            tempBeforeAdd.DateManager.MonthAdded = DateTime.Now.Month;
+                            //tempBeforeAdd.DateManager.MonthAdded = DateTime.Now.Month;
                             
                             
                             TimeSpan monthCountSpan = DateTime.Now.Date - tempBeforeAdd.DateManager.SubscriptionLastDate.Date;
-                            int elapsedExtraMonths = (int) Math.Floor(monthCountSpan.TotalDays / 30) -1 ;
+                            int elapsedExtraMonths = (int) Math.Floor(monthCountSpan.TotalDays / 30);
 
                             //levonni a penzbol meg elapsedMonths-szor
                             if(elapsedExtraMonths > 0)
+                            {
                                 inputData.Wallets.Single(wallet => wallet.WalletID == tempBeforeAdd.WalletID).Money += tempBeforeAdd.Money * tempBeforeAdd.Count * elapsedExtraMonths;
 
-                          //  MessageBox.Show(elapsedExtraMonths.ToString());
-                            CalculateBalance();
-                            tempBeforeAdd.DateManager.SubscriptionLastDate = DateTime.Now.Date;
+                                //  MessageBox.Show(elapsedExtraMonths.ToString());
+                                CalculateBalance();
+                                tempBeforeAdd.DateManager.SubscriptionLastDate = DateTime.Now.Date;
+                            }
+                                
                           //  MessageBox.Show("money has been added or subtracted");
                         }
                     }
