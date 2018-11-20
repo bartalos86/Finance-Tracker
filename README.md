@@ -29,5 +29,17 @@ Release | Download Source
 
 ![Main Design Image](https://image.ibb.co/hrOCew/Screenshot1.png)
 
-
+### **Image Sources**
+- https://www.flaticon.com/free-icon/cardiogram_139259
+- https://www.flaticon.com/free-icon/theater_214351#term=comedy&page=1&position=1
+- https://www.flaticon.com/free-icon/notebook_129491
+- https://www.flaticon.com/free-icon/fries_135589
+- https://www.flaticon.com/free-icon/notes_138255
+- https://www.flaticon.com/free-icon/tag_179454
+- https://www.flaticon.com/free-icon/budget_313062#term=calculator&page=1&position=26
+- https://www.flaticon.com/free-icon/sound-card_141015
+- https://www.flaticon.com/premium-icon/dollar-bill_123394#term=dollar&page=1&position=22
+- https://www.flaticon.com/free-icon/money_129526#term=dollar&page=1&position=38
+- https://www.flaticon.com/free-icon/wallet_138207#term=wallet&page=1&position=1
+- https://www.flaticon.com/free-icon/bitcoin_179437#term=bitcoin&page=1&position=24
 
